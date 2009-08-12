@@ -14,7 +14,7 @@ module Kt
     @@instance_obj = nil
     private
     def initialize(host, port)
-      puts "initializing KtComm"
+      # puts "initializing KtComm"
       @m_host = host
       @m_port = port
       
