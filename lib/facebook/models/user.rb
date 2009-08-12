@@ -1,5 +1,5 @@
 require 'kt/kt_analytics'
-require 'ruby-debug'
+# require 'ruby-debug'
 
 module Facebooker
   class User

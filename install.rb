@@ -2,7 +2,7 @@
 # Install hook code here
 require 'fileutils'
 require 'rubygems'
-#require 'ruby-debug' #xxx
+# require 'ruby-debug' #xxx
 
 if ARGV.size != 2
   puts "Failure: you need to pass in the controller_name"

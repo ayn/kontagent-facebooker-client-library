@@ -4,7 +4,7 @@ require 'kt/kt_comm_layer'
 require 'kt/kt_ab_testing'
 require 'kt/queue/task'
 require 'digest/md5'
-require 'ruby-debug'
+# require 'ruby-debug'
 
 module Kt
   class KtAnalytics

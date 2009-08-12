@@ -2,7 +2,7 @@
 
 require 'kt/kt_analytics'
 require 'cgi'
-require 'ruby-debug'
+# require 'ruby-debug'
 
 module Kt
   module Rails

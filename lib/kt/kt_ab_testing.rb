@@ -4,7 +4,7 @@ require 'net/http'
 require 'uri'
 require 'json'
 require 'digest/md5'
-require 'ruby-debug'
+# require 'ruby-debug'
 
 module Kt
   class AB_Testing_Manager

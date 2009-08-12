@@ -1,7 +1,7 @@
 # Kontagent facebooker version KONTAGENT_VERSION_NUMBER
 require 'kt/kt_analytics'
 require 'facebooker'
-require 'ruby-debug'
+# require 'ruby-debug'
 
 module Kt
   module Rails
