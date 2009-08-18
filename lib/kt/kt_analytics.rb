@@ -95,7 +95,6 @@ module Kt
       @config = YAML::load_file("#{RAILS_ROOT}/config/kontagent.yml")
       @config.merge! custom_conf if custom_conf
       
-      #figure out the port
       if @config.has_key? $CURR_API_KEY
         app_config_map = @config[$CURR_API_KEY]
       else
@@ -124,19 +123,19 @@ module Kt
 
       # figure out the host
       if app_config_map['use_test_server'] == true
-	@m_kt_host = @config['kt_host_test']
+        @m_kt_host = @config['kt_host_test']
       else
-	@m_kt_host = @config['kt_host']
+        @m_kt_host = @config['kt_host']
       end
 
       if @m_kt_host_port != 80      
-	@m_kt_host_url = "#{@m_kt_host}:#{@m_kt_host_port}"
+        @m_kt_host_url = "#{@m_kt_host}:#{@m_kt_host_port}"
       else
-	@m_kt_host_url = "#{@m_kt_host}"	
+        @m_kt_host_url = "#{@m_kt_host}"	
       end
-      
+
       @m_kt_url = @config['kt_url']
-      
+
       @m_kt_api_key = app_config_map['kt_api_key'].to_s
       @m_kt_secret_key = app_config_map['kt_secret_key'].to_s
       @m_canvas_name = app_config_map['canvas_page_name']
@@ -145,7 +144,7 @@ module Kt
       @m_call_back_host = app_config_map['call_back_host']
       @m_mode = (@config['mode'] == 'async') ? :async : :sync
       @m_timeout = @config['timeout'].blank? ? 1 : @config['timeout'].to_i
-      
+
       ##### possibly overriding ab_testing_host/port with some testing host port #####
       if app_config_map.has_key? 'ab_testing_host'
         @m_ab_testing_host = app_config_map['ab_testing_host']
@@ -154,13 +153,13 @@ module Kt
         @m_ab_testing_host = @config['ab_testing_host']
         @use_ab = true
       end
-      
+
       if app_config_map.has_key? 'ab_testing_port'
         @m_ab_testing_port = app_config_map['ab_testing_port']
       elsif @config.has_key? 'ab_testing_port'
         @m_ab_testing_port = @config['ab_testing_port']
       end
-      
+
       ##### the normal ab_testing_host/port #####
       if @m_ab_testing_host.nil? and @m_ab_testing_port.nil?
         if (app_config_map.has_key? 'use_ab' and app_config_map['use_ab'] == true) or (@config.has_key? 'use_ab'  and @config['use_ab'] == true)

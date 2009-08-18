@@ -39,14 +39,15 @@ module Kt
       end      
       
       def post_remove
-        puts "calling post_remove..."
+        logger.debug { "calling post_remove..." }
         Kt::KtAnalytics.instance.save_app_removed(params[:fb_sig_user])
         render :nothing => true
       end  
       
       protected
+      
       def verify_uninstall_signature
-        puts "calling verify_uninstall_signature..." #xxx
+        logger.debug { "calling verify_uninstall_signature..." }
         signature = ''
         keys = params.keys.sort
         keys.each do |key|
@@ -140,25 +141,24 @@ module Kt
 
           if params[:kt_type] != "ins"
             # forward to the url without the kt_* params
-            f_url =  get_stripped_kt_args_url(short_tag)
-            #puts "f_url \n\t #{f_url}" #xxx
-            redirect_to f_url
+            u = get_stripped_kt_args_url(short_tag)
+            logger.debug { "Redirecting to #{u}" }
+            redirect_to u #get_stripped_kt_args_url(short_tag)
           else
             return true
           end
         else
           return true
         end
-        
       end # handle_kontagent
-
       
       private
-      def gen_kt_install_cookie_key()
-        return "KT_"+Facebooker.api_key+"_installed"
+      
+      def gen_kt_install_cookie_key
+        "KT_" + Facebooker.api_key + "_installed"
       end
 
-      def get_stripped_kt_args_url (short_tag = nil)
+      def get_stripped_kt_args_url(short_tag=nil)
         get_params = request.parameters
         r_param_hash = {}
 
@@ -170,54 +170,40 @@ module Kt
               r_param_hash['ut'] = get_val
             end
             params.delete(get_key)
-          elsif !get_key.include? "fb_sig"
+          elsif !get_key.include?("fb_sig") && !%w(controller action format).include?(get_key)
             r_param_hash[get_key] = get_val
           end
         end
-        
-        if short_tag != nil
-          r_param_hash['sut'] = short_tag
-        end
-        
-        return build_url(r_param_hash)
-        
+
+        r_param_hash['sut'] = short_tag unless short_tag.nil?
+
+        build_url(r_param_hash)
+
       end #get_stripped_kt_args_url
-      
+
       def build_url(param_hash)
-	local_req_uri = Kt::KtAnalytics.instance.m_call_back_req_uri
-	matches = request.path.match(/#{local_req_uri}(.*)/)
+        local_req_uri = Kt::KtAnalytics.instance.m_call_back_req_uri
+        matches = request.path.match(/#{local_req_uri}(.*)/)
 
-	if matches == nil
-	  puts "found NO match!!!"
-	  r_url = ""
-	else
-	  puts "found a match!!!"
-	  puts "\t #{matches[1]}"
-	  r_url = matches[1]
-	  if r_url == "/"
-	    r_url = ""
-	  end
-	end
-	
-        
-#       puts "local_req_uri \n\t#{Kt::KtAnalytics.instance.m_call_back_req_uri}"
-# 	puts "canvas_name  \n\t #{Kt::KtAnalytics.instance.m_canvas_name}"
-# 	puts "request.request_uri  \n\t #{request.request_uri}"
-# 	puts "param_hash \n\t #{param_hash.to_query}"
-# 	puts "return_url \n\t#{Kt::KtAnalytics.instance.append_kt_query_str(r_url, param_hash.to_query)}"
-        
-	r_url = Kt::KtAnalytics.instance.append_kt_query_str("/"+Kt::KtAnalytics.instance.m_canvas_name+r_url, 
-							     param_hash.to_query)
-        #puts "final_url \n\t#{r_url}"
-	
-        return r_url
+        if matches.nil?
+          r_url = ""
+        else
+          r_url = matches[1]
+          r_url = "" if r_url == '/'
+        end
+
+        logger.debug { "local_req_uri = #{Kt::KtAnalytics.instance.m_call_back_req_uri}" }
+        logger.debug { "canvas_name  = #{Kt::KtAnalytics.instance.m_canvas_name}" }
+        logger.debug { "request.request_uri  = #{request.request_uri}" }
+        logger.debug { "param_hash = #{param_hash.to_query}" }
+        logger.debug { "return_url = #{Kt::KtAnalytics.instance.append_kt_query_str(r_url, param_hash.to_query)}" }
+        logger.debug { "REAL return_url = #{Kt::KtAnalytics.instance.append_kt_query_str("/" + Kt::KtAnalytics.instance.m_canvas_name + r_url, param_hash.to_query)}" }
+
+        r_url = Kt::KtAnalytics.instance.append_kt_query_str("/" + Kt::KtAnalytics.instance.m_canvas_name + "/" + r_url, param_hash.to_query)
       end
-	
+
       module ClassMethods
-	  
       end
-
-
     end
   end
 end
