@@ -22,7 +22,7 @@ module Kt
     @@S_profile_val = 'p'
     @@instance_obj = nil
     
-    attr_reader :m_comm, :m_kt_api_key, :m_canvas_name, :m_call_back_req_uri, :m_call_back_host, :m_kt_host, :m_kt_host_port, :m_kt_host_url, :m_ab_testing_mgr, :m_is_disabled
+    attr_reader :m_comm, :m_kt_api_key, :m_canvas_name, :m_call_back_req_uri, :m_call_back_host, :m_kt_host, :m_kt_host_port, :m_kt_host_url, :m_ab_testing_mgr, :m_is_disabled, :use_ab
     
     def self.instance()
       if @@instance_obj == nil
